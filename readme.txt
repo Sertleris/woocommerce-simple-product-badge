@@ -21,6 +21,11 @@ Feel free to add your pull request on <a href="http://github.com/pragmaticmates/
 2. Activate plugins from `Plugins` section in admin.
 3. On product detail define your custom badge.
 
+== Screenshots ==
+
+1. Admin area in product detail
+2. Front-end with additional styling
+
 == Changelog ==
 
 = 0.1.0 =
