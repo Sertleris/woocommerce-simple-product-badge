@@ -32,7 +32,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
         woocommerce_wp_text_input(array(
             'id'          => '_woocommerce_simple_product_badge_class',
-            'label'       => __( 'Badge Class', 'woocommerce-simple-product-badge' ),
+            'label'       => __( 'Badge Class', 'woocommerce-simple-product-badge[' . $variation->ID . ']' ),
             'description' => __( 'e.g. background-green', 'woocommerce-simple-product-badge' ),
         ) );
 
@@ -40,7 +40,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
     }
 add_action( 'woocommerce_product_options_general_product_data', 'woocommerce_simple_product_badge_fields' );
     /**
-     * Save custom fields values for single variable products by keeping one style class for all
+     * Save custom fields values for single variable products
      */
     add_action( 'woocommerce_save_product_variation', 'woocommerce_simple_product_badge_fields_save' );
     function woocommerce_simple_product_badge_fields_save( $post_id ) {
@@ -59,7 +59,7 @@ add_action( 'woocommerce_product_options_general_product_data', 'woocommerce_sim
 	add_action( 'woocommerce_process_product_meta', 'woocommerce_simple_product_badge_fields_save' );
     
     /**
-     * Display product badge on woocommerce image thumnail
+     * Display product badge on woocommerce image thumbnail
      */
     add_action( 'woocommerce_before_shop_loop_item', 'woocommerce_simple_product_badge_display', 30 );
     function woocommerce_simple_product_badge_display() {
