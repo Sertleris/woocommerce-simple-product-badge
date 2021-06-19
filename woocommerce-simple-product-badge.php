@@ -13,34 +13,36 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
+	
     /**
-     * New badge fields in admin
+     * New badge fields in admin for single and all variable products
      */
-    add_action( 'woocommerce_product_options_general_product_data', 'woocommerce_simple_product_badge_fields' );
+    add_action( 'woocommerce_product_after_variable_attributes', 'woocommerce_simple_product_badge_fields', 10, 3 );
     function woocommerce_simple_product_badge_fields() {
-        global $woocommerce, $post;
+        global $woocommerce, $post ; 
 
         echo '<div class="options_group">';
 
         woocommerce_wp_text_input(array(
-            'id'          => '_woocommerce_simple_product_badge_title',
-            'label'       => __( 'Badge Title', 'woocommerce-simple-product-badge' ),
+			'id'          => '_woocommerce_simple_product_badge_title',
+            'label'       => __( 'Badge Title', 'woocommerce-simple-product-badge[' . $variation->ID . ']' ),
             'description' => __( 'e.g. Recommended', 'woocommerce-simple-product-badge' ),
+			
         ) );
 
         woocommerce_wp_text_input(array(
             'id'          => '_woocommerce_simple_product_badge_class',
-            'label'       => __( 'Badge Class', 'woocommerce-simple-product-badge' ),
+            'label'       => __( 'Badge Class', 'woocommerce-simple-product-badge[' . $variation->ID . ']' ),
             'description' => __( 'e.g. background-green', 'woocommerce-simple-product-badge' ),
         ) );
 
         echo '</div>';
     }
-
+add_action( 'woocommerce_product_options_general_product_data', 'woocommerce_simple_product_badge_fields' );
     /**
-     * Save custom fields values
+     * Save custom fields values for single variable products
      */
-    add_action( 'woocommerce_process_product_meta', 'woocommerce_simple_product_badge_fields_save' );
+    add_action( 'woocommerce_save_product_variation', 'woocommerce_simple_product_badge_fields_save' );
     function woocommerce_simple_product_badge_fields_save( $post_id ) {
         $title = $_POST['_woocommerce_simple_product_badge_title'];
         $class = $_POST['_woocommerce_simple_product_badge_class'];
@@ -53,11 +55,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
             update_post_meta( $post_id, '_woocommerce_simple_product_badge_class', esc_attr( $class ) );
         }
     }
-
+	
+	add_action( 'woocommerce_process_product_meta', 'woocommerce_simple_product_badge_fields_save' );
+    
     /**
-     * Display product badge
+     * Display product badge on woocommerce image thumbnail
      */
-    add_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_simple_product_badge_display', 30 );
+    add_action( 'woocommerce_before_shop_loop_item', 'woocommerce_simple_product_badge_display', 30 );
     function woocommerce_simple_product_badge_display() {
         $title = get_post_meta( get_the_ID(), '_woocommerce_simple_product_badge_title', true );
         $class = get_post_meta( get_the_ID(), '_woocommerce_simple_product_badge_class', true );
